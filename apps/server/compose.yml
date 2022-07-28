@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres
+    ports:
+      - "8765:5432"
+    environment:
+      - POSTGRES_PASSWORD=123454321
+      - POSTGRES_USER=studiotwofour
+      - POSTGRES_DB=studiotwofour
+    volumes:
+      - ./.data:/var/lib/mysql
+    restart: on-failure
