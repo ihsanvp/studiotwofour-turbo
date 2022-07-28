@@ -1,10 +1,9 @@
-const WebpackShellPlugin = require("webpack-shell-plugin-next");
 const nodeExternals = require("webpack-node-externals");
 const path = require("path");
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
-  entry: "./app/server.ts",
+  entry: "./app/index.ts",
   mode: process.env.NODE_ENV,
   target: "node",
   output: {
@@ -23,12 +22,15 @@ module.exports = {
     ],
   },
   externals: [nodeExternals()],
-  plugins: [
-    new WebpackShellPlugin({
-      onBuildEnd: ["yarn run:dev"],
-    }),
-  ],
   stats: {
     errorDetails: true,
+  },
+  resolve: {
+    modules: [
+      "node_modules",
+      path.resolve(__dirname),
+      path.resolve(__dirname, "../../node_modules"),
+    ],
+    extensions: [".ts", ".js", ".d.ts"],
   },
 };

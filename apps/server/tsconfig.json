@@ -6,7 +6,11 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "baseUrl": "."
+    // "paths": {
+    //   "app/*": ["app/*"]
+    // }
   },
   "exclude": ["node_modules"]
 }
