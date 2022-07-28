@@ -4,7 +4,7 @@ const path = require("path");
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
-  entry: "./server.ts",
+  entry: "./app/server.ts",
   mode: process.env.NODE_ENV,
   target: "node",
   output: {
