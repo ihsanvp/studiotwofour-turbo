@@ -17,9 +17,10 @@ type UnwrapTuple<Tuple extends readonly unknown[]> = {
  * 
  */
 export type Asset = {
-  id: number
+  id: string
   name: string
   path: string
+  mime: string
   size: number
   created: Date
 }
@@ -29,10 +30,11 @@ export type Asset = {
  * 
  */
 export type Banner = {
-  id: number
+  id: string
+  path: string
   width: number
   height: number
-  assetId: number
+  assetId: string
 }
 
 
@@ -823,6 +825,54 @@ export namespace Prisma {
    */
 
 
+  /**
+   * Count Type AssetCountOutputType
+   */
+
+
+  export type AssetCountOutputType = {
+    Banner: number
+  }
+
+  export type AssetCountOutputTypeSelect = {
+    Banner?: boolean
+  }
+
+  export type AssetCountOutputTypeGetPayload<
+    S extends boolean | null | undefined | AssetCountOutputTypeArgs,
+    U = keyof S
+      > = S extends true
+        ? AssetCountOutputType
+    : S extends undefined
+    ? never
+    : S extends AssetCountOutputTypeArgs
+    ?'include' extends U
+    ? AssetCountOutputType 
+    : 'select' extends U
+    ? {
+    [P in TrueKeys<S['select']>]:
+    P extends keyof AssetCountOutputType ? AssetCountOutputType[P] : never
+  } 
+    : AssetCountOutputType
+  : AssetCountOutputType
+
+
+
+
+  // Custom InputTypes
+
+  /**
+   * AssetCountOutputType without action
+   */
+  export type AssetCountOutputTypeArgs = {
+    /**
+     * Select specific fields to fetch from the AssetCountOutputType
+     * 
+    **/
+    select?: AssetCountOutputTypeSelect | null
+  }
+
+
 
   /**
    * Models
@@ -842,27 +892,27 @@ export namespace Prisma {
   }
 
   export type AssetAvgAggregateOutputType = {
-    id: number | null
     size: number | null
   }
 
   export type AssetSumAggregateOutputType = {
-    id: number | null
     size: number | null
   }
 
   export type AssetMinAggregateOutputType = {
-    id: number | null
+    id: string | null
     name: string | null
     path: string | null
+    mime: string | null
     size: number | null
     created: Date | null
   }
 
   export type AssetMaxAggregateOutputType = {
-    id: number | null
+    id: string | null
     name: string | null
     path: string | null
+    mime: string | null
     size: number | null
     created: Date | null
   }
@@ -871,6 +921,7 @@ export namespace Prisma {
     id: number
     name: number
     path: number
+    mime: number
     size: number
     created: number
     _all: number
@@ -878,12 +929,10 @@ export namespace Prisma {
 
 
   export type AssetAvgAggregateInputType = {
-    id?: true
     size?: true
   }
 
   export type AssetSumAggregateInputType = {
-    id?: true
     size?: true
   }
 
@@ -891,6 +940,7 @@ export namespace Prisma {
     id?: true
     name?: true
     path?: true
+    mime?: true
     size?: true
     created?: true
   }
@@ -899,6 +949,7 @@ export namespace Prisma {
     id?: true
     name?: true
     path?: true
+    mime?: true
     size?: true
     created?: true
   }
@@ -907,6 +958,7 @@ export namespace Prisma {
     id?: true
     name?: true
     path?: true
+    mime?: true
     size?: true
     created?: true
     _all?: true
@@ -1005,9 +1057,10 @@ export namespace Prisma {
 
 
   export type AssetGroupByOutputType = {
-    id: number
+    id: string
     name: string
     path: string
+    mime: string
     size: number
     created: Date
     _count: AssetCountAggregateOutputType | null
@@ -1035,13 +1088,16 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     path?: boolean
+    mime?: boolean
     size?: boolean
     created?: boolean
-    Banner?: boolean | BannerArgs
+    Banner?: boolean | BannerFindManyArgs
+    _count?: boolean | AssetCountOutputTypeArgs
   }
 
   export type AssetInclude = {
-    Banner?: boolean | BannerArgs
+    Banner?: boolean | BannerFindManyArgs
+    _count?: boolean | AssetCountOutputTypeArgs
   }
 
   export type AssetGetPayload<
@@ -1055,12 +1111,14 @@ export namespace Prisma {
     ?'include' extends U
     ? Asset  & {
     [P in TrueKeys<S['include']>]:
-        P extends 'Banner' ? BannerGetPayload<S['include'][P]> | null :  never
+        P extends 'Banner' ? Array < BannerGetPayload<S['include'][P]>>  :
+        P extends '_count' ? AssetCountOutputTypeGetPayload<S['include'][P]> :  never
   } 
     : 'select' extends U
     ? {
     [P in TrueKeys<S['select']>]:
-        P extends 'Banner' ? BannerGetPayload<S['select'][P]> | null :  P extends keyof Asset ? Asset[P] : never
+        P extends 'Banner' ? Array < BannerGetPayload<S['select'][P]>>  :
+        P extends '_count' ? AssetCountOutputTypeGetPayload<S['select'][P]> :  P extends keyof Asset ? Asset[P] : never
   } 
     : Asset
   : Asset
@@ -1434,7 +1492,7 @@ export namespace Prisma {
     constructor(_dmmf: runtime.DMMFClass, _fetcher: PrismaClientFetcher, _queryType: 'query' | 'mutation', _rootField: string, _clientMethod: string, _args: any, _dataPath: string[], _errorFormat: ErrorFormat, _measurePerformance?: boolean | undefined, _isList?: boolean);
     readonly [Symbol.toStringTag]: 'PrismaClientPromise';
 
-    Banner<T extends BannerArgs = {}>(args?: Subset<T, BannerArgs>): CheckSelect<T, Prisma__BannerClient<Banner | null >, Prisma__BannerClient<BannerGetPayload<T> | null >>;
+    Banner<T extends BannerFindManyArgs = {}>(args?: Subset<T, BannerFindManyArgs>): CheckSelect<T, PrismaPromise<Array<Banner>>, PrismaPromise<Array<BannerGetPayload<T>>>>;
 
     private get _document();
     /**
@@ -1802,35 +1860,34 @@ export namespace Prisma {
   }
 
   export type BannerAvgAggregateOutputType = {
-    id: number | null
     width: number | null
     height: number | null
-    assetId: number | null
   }
 
   export type BannerSumAggregateOutputType = {
-    id: number | null
     width: number | null
     height: number | null
-    assetId: number | null
   }
 
   export type BannerMinAggregateOutputType = {
-    id: number | null
+    id: string | null
+    path: string | null
     width: number | null
     height: number | null
-    assetId: number | null
+    assetId: string | null
   }
 
   export type BannerMaxAggregateOutputType = {
-    id: number | null
+    id: string | null
+    path: string | null
     width: number | null
     height: number | null
-    assetId: number | null
+    assetId: string | null
   }
 
   export type BannerCountAggregateOutputType = {
     id: number
+    path: number
     width: number
     height: number
     assetId: number
@@ -1839,21 +1896,18 @@ export namespace Prisma {
 
 
   export type BannerAvgAggregateInputType = {
-    id?: true
     width?: true
     height?: true
-    assetId?: true
   }
 
   export type BannerSumAggregateInputType = {
-    id?: true
     width?: true
     height?: true
-    assetId?: true
   }
 
   export type BannerMinAggregateInputType = {
     id?: true
+    path?: true
     width?: true
     height?: true
     assetId?: true
@@ -1861,6 +1915,7 @@ export namespace Prisma {
 
   export type BannerMaxAggregateInputType = {
     id?: true
+    path?: true
     width?: true
     height?: true
     assetId?: true
@@ -1868,6 +1923,7 @@ export namespace Prisma {
 
   export type BannerCountAggregateInputType = {
     id?: true
+    path?: true
     width?: true
     height?: true
     assetId?: true
@@ -1967,10 +2023,11 @@ export namespace Prisma {
 
 
   export type BannerGroupByOutputType = {
-    id: number
+    id: string
+    path: string
     width: number
     height: number
-    assetId: number
+    assetId: string
     _count: BannerCountAggregateOutputType | null
     _avg: BannerAvgAggregateOutputType | null
     _sum: BannerSumAggregateOutputType | null
@@ -1994,6 +2051,7 @@ export namespace Prisma {
 
   export type BannerSelect = {
     id?: boolean
+    path?: boolean
     width?: boolean
     height?: boolean
     asset?: boolean | AssetArgs
@@ -2759,6 +2817,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     path: 'path',
+    mime: 'mime',
     size: 'size',
     created: 'created'
   };
@@ -2768,6 +2827,7 @@ export namespace Prisma {
 
   export const BannerScalarFieldEnum: {
     id: 'id',
+    path: 'path',
     width: 'width',
     height: 'height',
     assetId: 'assetId'
@@ -2801,31 +2861,34 @@ export namespace Prisma {
     AND?: Enumerable<AssetWhereInput>
     OR?: Enumerable<AssetWhereInput>
     NOT?: Enumerable<AssetWhereInput>
-    id?: IntFilter | number
+    id?: StringFilter | string
     name?: StringFilter | string
     path?: StringFilter | string
+    mime?: StringFilter | string
     size?: IntFilter | number
     created?: DateTimeFilter | Date | string
-    Banner?: XOR<BannerRelationFilter, BannerWhereInput> | null
+    Banner?: BannerListRelationFilter
   }
 
   export type AssetOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
     path?: SortOrder
+    mime?: SortOrder
     size?: SortOrder
     created?: SortOrder
-    Banner?: BannerOrderByWithRelationInput
+    Banner?: BannerOrderByRelationAggregateInput
   }
 
   export type AssetWhereUniqueInput = {
-    id?: number
+    id?: string
   }
 
   export type AssetOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     path?: SortOrder
+    mime?: SortOrder
     size?: SortOrder
     created?: SortOrder
     _count?: AssetCountOrderByAggregateInput
@@ -2839,9 +2902,10 @@ export namespace Prisma {
     AND?: Enumerable<AssetScalarWhereWithAggregatesInput>
     OR?: Enumerable<AssetScalarWhereWithAggregatesInput>
     NOT?: Enumerable<AssetScalarWhereWithAggregatesInput>
-    id?: IntWithAggregatesFilter | number
+    id?: StringWithAggregatesFilter | string
     name?: StringWithAggregatesFilter | string
     path?: StringWithAggregatesFilter | string
+    mime?: StringWithAggregatesFilter | string
     size?: IntWithAggregatesFilter | number
     created?: DateTimeWithAggregatesFilter | Date | string
   }
@@ -2850,15 +2914,17 @@ export namespace Prisma {
     AND?: Enumerable<BannerWhereInput>
     OR?: Enumerable<BannerWhereInput>
     NOT?: Enumerable<BannerWhereInput>
-    id?: IntFilter | number
+    id?: StringFilter | string
+    path?: StringFilter | string
     width?: IntFilter | number
     height?: IntFilter | number
     asset?: XOR<AssetRelationFilter, AssetWhereInput>
-    assetId?: IntFilter | number
+    assetId?: StringFilter | string
   }
 
   export type BannerOrderByWithRelationInput = {
     id?: SortOrder
+    path?: SortOrder
     width?: SortOrder
     height?: SortOrder
     asset?: AssetOrderByWithRelationInput
@@ -2866,12 +2932,12 @@ export namespace Prisma {
   }
 
   export type BannerWhereUniqueInput = {
-    id?: number
-    assetId?: number
+    id?: string
   }
 
   export type BannerOrderByWithAggregationInput = {
     id?: SortOrder
+    path?: SortOrder
     width?: SortOrder
     height?: SortOrder
     assetId?: SortOrder
@@ -2886,123 +2952,133 @@ export namespace Prisma {
     AND?: Enumerable<BannerScalarWhereWithAggregatesInput>
     OR?: Enumerable<BannerScalarWhereWithAggregatesInput>
     NOT?: Enumerable<BannerScalarWhereWithAggregatesInput>
-    id?: IntWithAggregatesFilter | number
+    id?: StringWithAggregatesFilter | string
+    path?: StringWithAggregatesFilter | string
     width?: IntWithAggregatesFilter | number
     height?: IntWithAggregatesFilter | number
-    assetId?: IntWithAggregatesFilter | number
+    assetId?: StringWithAggregatesFilter | string
   }
 
   export type AssetCreateInput = {
+    id?: string
     name: string
     path: string
+    mime: string
     size: number
     created?: Date | string
-    Banner?: BannerCreateNestedOneWithoutAssetInput
+    Banner?: BannerCreateNestedManyWithoutAssetInput
   }
 
   export type AssetUncheckedCreateInput = {
-    id?: number
+    id?: string
     name: string
     path: string
+    mime: string
     size: number
     created?: Date | string
-    Banner?: BannerUncheckedCreateNestedOneWithoutAssetInput
+    Banner?: BannerUncheckedCreateNestedManyWithoutAssetInput
   }
 
   export type AssetUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     path?: StringFieldUpdateOperationsInput | string
+    mime?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     created?: DateTimeFieldUpdateOperationsInput | Date | string
-    Banner?: BannerUpdateOneWithoutAssetNestedInput
+    Banner?: BannerUpdateManyWithoutAssetNestedInput
   }
 
   export type AssetUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     path?: StringFieldUpdateOperationsInput | string
+    mime?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     created?: DateTimeFieldUpdateOperationsInput | Date | string
-    Banner?: BannerUncheckedUpdateOneWithoutAssetNestedInput
+    Banner?: BannerUncheckedUpdateManyWithoutAssetNestedInput
   }
 
   export type AssetCreateManyInput = {
-    id?: number
+    id?: string
     name: string
     path: string
+    mime: string
     size: number
     created?: Date | string
   }
 
   export type AssetUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     path?: StringFieldUpdateOperationsInput | string
+    mime?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     created?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AssetUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     path?: StringFieldUpdateOperationsInput | string
+    mime?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     created?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BannerCreateInput = {
+    id?: string
+    path: string
     width: number
     height: number
     asset: AssetCreateNestedOneWithoutBannerInput
   }
 
   export type BannerUncheckedCreateInput = {
-    id?: number
+    id?: string
+    path: string
     width: number
     height: number
-    assetId: number
+    assetId: string
   }
 
   export type BannerUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
     width?: IntFieldUpdateOperationsInput | number
     height?: IntFieldUpdateOperationsInput | number
     asset?: AssetUpdateOneRequiredWithoutBannerNestedInput
   }
 
   export type BannerUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
     width?: IntFieldUpdateOperationsInput | number
     height?: IntFieldUpdateOperationsInput | number
-    assetId?: IntFieldUpdateOperationsInput | number
+    assetId?: StringFieldUpdateOperationsInput | string
   }
 
   export type BannerCreateManyInput = {
-    id?: number
+    id?: string
+    path: string
     width: number
     height: number
-    assetId: number
+    assetId: string
   }
 
   export type BannerUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
     width?: IntFieldUpdateOperationsInput | number
     height?: IntFieldUpdateOperationsInput | number
   }
 
   export type BannerUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
     width?: IntFieldUpdateOperationsInput | number
     height?: IntFieldUpdateOperationsInput | number
-    assetId?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type IntFilter = {
-    equals?: number
-    in?: Enumerable<number>
-    notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntFilter | number
+    assetId?: StringFieldUpdateOperationsInput | string
   }
 
   export type StringFilter = {
@@ -3020,6 +3096,17 @@ export namespace Prisma {
     not?: NestedStringFilter | string
   }
 
+  export type IntFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntFilter | number
+  }
+
   export type DateTimeFilter = {
     equals?: Date | string
     in?: Enumerable<Date> | Enumerable<string>
@@ -3031,21 +3118,26 @@ export namespace Prisma {
     not?: NestedDateTimeFilter | Date | string
   }
 
-  export type BannerRelationFilter = {
-    is?: BannerWhereInput | null
-    isNot?: BannerWhereInput | null
+  export type BannerListRelationFilter = {
+    every?: BannerWhereInput
+    some?: BannerWhereInput
+    none?: BannerWhereInput
+  }
+
+  export type BannerOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type AssetCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     path?: SortOrder
+    mime?: SortOrder
     size?: SortOrder
     created?: SortOrder
   }
 
   export type AssetAvgOrderByAggregateInput = {
-    id?: SortOrder
     size?: SortOrder
   }
 
@@ -3053,6 +3145,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     path?: SortOrder
+    mime?: SortOrder
     size?: SortOrder
     created?: SortOrder
   }
@@ -3061,29 +3154,13 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     path?: SortOrder
+    mime?: SortOrder
     size?: SortOrder
     created?: SortOrder
   }
 
   export type AssetSumOrderByAggregateInput = {
-    id?: SortOrder
     size?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter = {
-    equals?: number
-    in?: Enumerable<number>
-    notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntWithAggregatesFilter | number
-    _count?: NestedIntFilter
-    _avg?: NestedFloatFilter
-    _sum?: NestedIntFilter
-    _min?: NestedIntFilter
-    _max?: NestedIntFilter
   }
 
   export type StringWithAggregatesFilter = {
@@ -3102,6 +3179,22 @@ export namespace Prisma {
     _count?: NestedIntFilter
     _min?: NestedStringFilter
     _max?: NestedStringFilter
+  }
+
+  export type IntWithAggregatesFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntWithAggregatesFilter | number
+    _count?: NestedIntFilter
+    _avg?: NestedFloatFilter
+    _sum?: NestedIntFilter
+    _min?: NestedIntFilter
+    _max?: NestedIntFilter
   }
 
   export type DateTimeWithAggregatesFilter = {
@@ -3125,20 +3218,20 @@ export namespace Prisma {
 
   export type BannerCountOrderByAggregateInput = {
     id?: SortOrder
+    path?: SortOrder
     width?: SortOrder
     height?: SortOrder
     assetId?: SortOrder
   }
 
   export type BannerAvgOrderByAggregateInput = {
-    id?: SortOrder
     width?: SortOrder
     height?: SortOrder
-    assetId?: SortOrder
   }
 
   export type BannerMaxOrderByAggregateInput = {
     id?: SortOrder
+    path?: SortOrder
     width?: SortOrder
     height?: SortOrder
     assetId?: SortOrder
@@ -3146,28 +3239,29 @@ export namespace Prisma {
 
   export type BannerMinOrderByAggregateInput = {
     id?: SortOrder
+    path?: SortOrder
     width?: SortOrder
     height?: SortOrder
     assetId?: SortOrder
   }
 
   export type BannerSumOrderByAggregateInput = {
-    id?: SortOrder
     width?: SortOrder
     height?: SortOrder
-    assetId?: SortOrder
   }
 
-  export type BannerCreateNestedOneWithoutAssetInput = {
-    create?: XOR<BannerCreateWithoutAssetInput, BannerUncheckedCreateWithoutAssetInput>
-    connectOrCreate?: BannerCreateOrConnectWithoutAssetInput
-    connect?: BannerWhereUniqueInput
+  export type BannerCreateNestedManyWithoutAssetInput = {
+    create?: XOR<Enumerable<BannerCreateWithoutAssetInput>, Enumerable<BannerUncheckedCreateWithoutAssetInput>>
+    connectOrCreate?: Enumerable<BannerCreateOrConnectWithoutAssetInput>
+    createMany?: BannerCreateManyAssetInputEnvelope
+    connect?: Enumerable<BannerWhereUniqueInput>
   }
 
-  export type BannerUncheckedCreateNestedOneWithoutAssetInput = {
-    create?: XOR<BannerCreateWithoutAssetInput, BannerUncheckedCreateWithoutAssetInput>
-    connectOrCreate?: BannerCreateOrConnectWithoutAssetInput
-    connect?: BannerWhereUniqueInput
+  export type BannerUncheckedCreateNestedManyWithoutAssetInput = {
+    create?: XOR<Enumerable<BannerCreateWithoutAssetInput>, Enumerable<BannerUncheckedCreateWithoutAssetInput>>
+    connectOrCreate?: Enumerable<BannerCreateOrConnectWithoutAssetInput>
+    createMany?: BannerCreateManyAssetInputEnvelope
+    connect?: Enumerable<BannerWhereUniqueInput>
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -3186,24 +3280,32 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type BannerUpdateOneWithoutAssetNestedInput = {
-    create?: XOR<BannerCreateWithoutAssetInput, BannerUncheckedCreateWithoutAssetInput>
-    connectOrCreate?: BannerCreateOrConnectWithoutAssetInput
-    upsert?: BannerUpsertWithoutAssetInput
-    disconnect?: boolean
-    delete?: boolean
-    connect?: BannerWhereUniqueInput
-    update?: XOR<BannerUpdateWithoutAssetInput, BannerUncheckedUpdateWithoutAssetInput>
+  export type BannerUpdateManyWithoutAssetNestedInput = {
+    create?: XOR<Enumerable<BannerCreateWithoutAssetInput>, Enumerable<BannerUncheckedCreateWithoutAssetInput>>
+    connectOrCreate?: Enumerable<BannerCreateOrConnectWithoutAssetInput>
+    upsert?: Enumerable<BannerUpsertWithWhereUniqueWithoutAssetInput>
+    createMany?: BannerCreateManyAssetInputEnvelope
+    set?: Enumerable<BannerWhereUniqueInput>
+    disconnect?: Enumerable<BannerWhereUniqueInput>
+    delete?: Enumerable<BannerWhereUniqueInput>
+    connect?: Enumerable<BannerWhereUniqueInput>
+    update?: Enumerable<BannerUpdateWithWhereUniqueWithoutAssetInput>
+    updateMany?: Enumerable<BannerUpdateManyWithWhereWithoutAssetInput>
+    deleteMany?: Enumerable<BannerScalarWhereInput>
   }
 
-  export type BannerUncheckedUpdateOneWithoutAssetNestedInput = {
-    create?: XOR<BannerCreateWithoutAssetInput, BannerUncheckedCreateWithoutAssetInput>
-    connectOrCreate?: BannerCreateOrConnectWithoutAssetInput
-    upsert?: BannerUpsertWithoutAssetInput
-    disconnect?: boolean
-    delete?: boolean
-    connect?: BannerWhereUniqueInput
-    update?: XOR<BannerUpdateWithoutAssetInput, BannerUncheckedUpdateWithoutAssetInput>
+  export type BannerUncheckedUpdateManyWithoutAssetNestedInput = {
+    create?: XOR<Enumerable<BannerCreateWithoutAssetInput>, Enumerable<BannerUncheckedCreateWithoutAssetInput>>
+    connectOrCreate?: Enumerable<BannerCreateOrConnectWithoutAssetInput>
+    upsert?: Enumerable<BannerUpsertWithWhereUniqueWithoutAssetInput>
+    createMany?: BannerCreateManyAssetInputEnvelope
+    set?: Enumerable<BannerWhereUniqueInput>
+    disconnect?: Enumerable<BannerWhereUniqueInput>
+    delete?: Enumerable<BannerWhereUniqueInput>
+    connect?: Enumerable<BannerWhereUniqueInput>
+    update?: Enumerable<BannerUpdateWithWhereUniqueWithoutAssetInput>
+    updateMany?: Enumerable<BannerUpdateManyWithWhereWithoutAssetInput>
+    deleteMany?: Enumerable<BannerScalarWhereInput>
   }
 
   export type AssetCreateNestedOneWithoutBannerInput = {
@@ -3220,17 +3322,6 @@ export namespace Prisma {
     update?: XOR<AssetUpdateWithoutBannerInput, AssetUncheckedUpdateWithoutBannerInput>
   }
 
-  export type NestedIntFilter = {
-    equals?: number
-    in?: Enumerable<number>
-    notIn?: Enumerable<number>
-    lt?: number
-    lte?: number
-    gt?: number
-    gte?: number
-    not?: NestedIntFilter | number
-  }
-
   export type NestedStringFilter = {
     equals?: string
     in?: Enumerable<string>
@@ -3245,6 +3336,17 @@ export namespace Prisma {
     not?: NestedStringFilter | string
   }
 
+  export type NestedIntFilter = {
+    equals?: number
+    in?: Enumerable<number>
+    notIn?: Enumerable<number>
+    lt?: number
+    lte?: number
+    gt?: number
+    gte?: number
+    not?: NestedIntFilter | number
+  }
+
   export type NestedDateTimeFilter = {
     equals?: Date | string
     in?: Enumerable<Date> | Enumerable<string>
@@ -3254,6 +3356,23 @@ export namespace Prisma {
     gt?: Date | string
     gte?: Date | string
     not?: NestedDateTimeFilter | Date | string
+  }
+
+  export type NestedStringWithAggregatesFilter = {
+    equals?: string
+    in?: Enumerable<string>
+    notIn?: Enumerable<string>
+    lt?: string
+    lte?: string
+    gt?: string
+    gte?: string
+    contains?: string
+    startsWith?: string
+    endsWith?: string
+    not?: NestedStringWithAggregatesFilter | string
+    _count?: NestedIntFilter
+    _min?: NestedStringFilter
+    _max?: NestedStringFilter
   }
 
   export type NestedIntWithAggregatesFilter = {
@@ -3283,23 +3402,6 @@ export namespace Prisma {
     not?: NestedFloatFilter | number
   }
 
-  export type NestedStringWithAggregatesFilter = {
-    equals?: string
-    in?: Enumerable<string>
-    notIn?: Enumerable<string>
-    lt?: string
-    lte?: string
-    gt?: string
-    gte?: string
-    contains?: string
-    startsWith?: string
-    endsWith?: string
-    not?: NestedStringWithAggregatesFilter | string
-    _count?: NestedIntFilter
-    _min?: NestedStringFilter
-    _max?: NestedStringFilter
-  }
-
   export type NestedDateTimeWithAggregatesFilter = {
     equals?: Date | string
     in?: Enumerable<Date> | Enumerable<string>
@@ -3315,12 +3417,15 @@ export namespace Prisma {
   }
 
   export type BannerCreateWithoutAssetInput = {
+    id?: string
+    path: string
     width: number
     height: number
   }
 
   export type BannerUncheckedCreateWithoutAssetInput = {
-    id?: number
+    id?: string
+    path: string
     width: number
     height: number
   }
@@ -3330,33 +3435,52 @@ export namespace Prisma {
     create: XOR<BannerCreateWithoutAssetInput, BannerUncheckedCreateWithoutAssetInput>
   }
 
-  export type BannerUpsertWithoutAssetInput = {
+  export type BannerCreateManyAssetInputEnvelope = {
+    data: Enumerable<BannerCreateManyAssetInput>
+    skipDuplicates?: boolean
+  }
+
+  export type BannerUpsertWithWhereUniqueWithoutAssetInput = {
+    where: BannerWhereUniqueInput
     update: XOR<BannerUpdateWithoutAssetInput, BannerUncheckedUpdateWithoutAssetInput>
     create: XOR<BannerCreateWithoutAssetInput, BannerUncheckedCreateWithoutAssetInput>
   }
 
-  export type BannerUpdateWithoutAssetInput = {
-    width?: IntFieldUpdateOperationsInput | number
-    height?: IntFieldUpdateOperationsInput | number
+  export type BannerUpdateWithWhereUniqueWithoutAssetInput = {
+    where: BannerWhereUniqueInput
+    data: XOR<BannerUpdateWithoutAssetInput, BannerUncheckedUpdateWithoutAssetInput>
   }
 
-  export type BannerUncheckedUpdateWithoutAssetInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    width?: IntFieldUpdateOperationsInput | number
-    height?: IntFieldUpdateOperationsInput | number
+  export type BannerUpdateManyWithWhereWithoutAssetInput = {
+    where: BannerScalarWhereInput
+    data: XOR<BannerUpdateManyMutationInput, BannerUncheckedUpdateManyWithoutBannerInput>
+  }
+
+  export type BannerScalarWhereInput = {
+    AND?: Enumerable<BannerScalarWhereInput>
+    OR?: Enumerable<BannerScalarWhereInput>
+    NOT?: Enumerable<BannerScalarWhereInput>
+    id?: StringFilter | string
+    path?: StringFilter | string
+    width?: IntFilter | number
+    height?: IntFilter | number
+    assetId?: StringFilter | string
   }
 
   export type AssetCreateWithoutBannerInput = {
+    id?: string
     name: string
     path: string
+    mime: string
     size: number
     created?: Date | string
   }
 
   export type AssetUncheckedCreateWithoutBannerInput = {
-    id?: number
+    id?: string
     name: string
     path: string
+    mime: string
     size: number
     created?: Date | string
   }
@@ -3372,18 +3496,49 @@ export namespace Prisma {
   }
 
   export type AssetUpdateWithoutBannerInput = {
+    id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     path?: StringFieldUpdateOperationsInput | string
+    mime?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     created?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AssetUncheckedUpdateWithoutBannerInput = {
-    id?: IntFieldUpdateOperationsInput | number
+    id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     path?: StringFieldUpdateOperationsInput | string
+    mime?: StringFieldUpdateOperationsInput | string
     size?: IntFieldUpdateOperationsInput | number
     created?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BannerCreateManyAssetInput = {
+    id?: string
+    path: string
+    width: number
+    height: number
+  }
+
+  export type BannerUpdateWithoutAssetInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    width?: IntFieldUpdateOperationsInput | number
+    height?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type BannerUncheckedUpdateWithoutAssetInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    width?: IntFieldUpdateOperationsInput | number
+    height?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type BannerUncheckedUpdateManyWithoutBannerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    path?: StringFieldUpdateOperationsInput | string
+    width?: IntFieldUpdateOperationsInput | number
+    height?: IntFieldUpdateOperationsInput | number
   }
 
 

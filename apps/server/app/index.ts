@@ -11,7 +11,9 @@ import extract from "extract-zip";
 import glob from "glob";
 import { ensureDir } from "./utils/fs.util";
 import { PORT, TEMP_DIR, UPLOAD_DIR } from "./configs/general.config";
-import AssetsRouter from "app/routes/asset.route";
+import AssetsRouter from "./routes/asset.route";
+import BannersRouter from "./routes/banner.route";
+import cors from "cors";
 
 ensureDir(UPLOAD_DIR);
 ensureDir(TEMP_DIR);
@@ -19,6 +21,7 @@ ensureDir(TEMP_DIR);
 const app = express();
 
 // Middlewares
+app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 app.use("/uploads", express.static(UPLOAD_DIR));
@@ -31,6 +34,7 @@ app.use(
 
 // Routes
 app.use("/assets", AssetsRouter);
+app.use("/banners", BannersRouter);
 
 function cleanBannerFile(location: string, dir: string): Promise<string> {
   return new Promise((resolve, reject) => {

@@ -5,4 +5,6 @@ const router = Router();
 
 router.post("/upload", AssetsController.upload);
 
+router.get("/", AssetsController.list);
+
 export default router;

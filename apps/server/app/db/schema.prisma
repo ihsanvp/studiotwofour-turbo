@@ -12,18 +12,20 @@ datasource db {
 }
 
 model Asset {
-  id      Int      @id @default(autoincrement())
+  id      String   @id @default(uuid())
   name    String
   path    String
+  mime    String
   size    Int
   created DateTime @default(now())
-  Banner  Banner?
+  Banner  Banner[]
 }
 
 model Banner {
-  id      Int   @id @default(autoincrement())
+  id      String @id @default(uuid())
+  path    String
   width   Int
   height  Int
-  asset   Asset @relation(fields: [assetId], references: [id])
-  assetId Int   @unique
+  asset   Asset  @relation(fields: [assetId], references: [id])
+  assetId String
 }

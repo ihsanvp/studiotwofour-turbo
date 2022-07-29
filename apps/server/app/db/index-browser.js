@@ -91,12 +91,14 @@ exports.Prisma.AssetScalarFieldEnum = makeEnum({
   id: 'id',
   name: 'name',
   path: 'path',
+  mime: 'mime',
   size: 'size',
   created: 'created'
 });
 
 exports.Prisma.BannerScalarFieldEnum = makeEnum({
   id: 'id',
+  path: 'path',
   width: 'width',
   height: 'height',
   assetId: 'assetId'
